@@ -359,27 +359,58 @@ document.addEventListener('DOMContentLoaded', () => {
     const stickyCards = document.querySelectorAll('.sticky-card');
     const stickyTexts = document.querySelectorAll('.sticky-text');
 
-
-    stickyCards.forEach((card, index) => {
-      gsap.set(card, { opacity: 0, y: 0 });
+    // Apply 'will-change' to cards to inform the browser about upcoming animations
+    stickyCards.forEach((card) => {
+      card.style.willChange = 'transform, opacity';
     });
 
+    // Set up initial states for all cards
+    stickyCards.forEach((card) => {
+      gsap.set(card, { opacity: 0, yPercent: 50 }); // Keep cards off-screen initially
+    });
 
+    // Create ScrollTrigger for pinning the section and animating cards one by one
+    gsap.fromTo(
+      stickyCards,
+      {
+        opacity: 0, // Initial opacity (hidden)
+        yPercent: 100, // Initial Y-position off-screen
+      },
+      {
+        opacity: 1, // Fade in the card
+        yPercent: 0, // Move the card to its final position
+        delay: (index) => index * 0.5, // Delay each card by 0.5 seconds per card
+        scrollTrigger: {
+          trigger: ".sticky-section", // Pin the section containing cards
+          start: "top top", // Start when the top of the section reaches the top of the viewport
+          end: "+=400%", // Duration of pinning (adjust this value to your content)
+          scrub: 1, // Smooth scroll animation
+          pin: true, // Pin the section while scrolling
+          markers: false,
+          onUpdate: function () {
+            // Trigger onUpdate for scroll effects
+            updateCardClasses();
+          },
+        },
+      }
+    );
+
+    // Function to manage the active, previous, and next classes for sticky cards
     function updateCardClasses() {
       stickyCards.forEach((card, index) => {
         const cardRect = card.getBoundingClientRect();
         const cardCenter = cardRect.top + cardRect.height / 2;
+        const viewportHeight = window.innerHeight;
 
-
-        if (cardCenter > window.innerHeight * 0.25 && cardCenter < window.innerHeight * 0.75) {
+        // Ensure the active card is correctly detected
+        if (cardCenter > viewportHeight * 0.25 && cardCenter < viewportHeight * 0.75) {
           card.classList.add('active');
           card.classList.remove('previous', 'next');
 
-
+          // Animate previous cards only if they are truly previous in the scroll order
           stickyCards.forEach((previousCard, prevIndex) => {
-            if (prevIndex < index) {
+            if (prevIndex < index && !previousCard.classList.contains('active')) {
               previousCard.classList.add('previous');
-
               gsap.to(previousCard, {
                 y: -((index - prevIndex) * 20),
                 opacity: 0.6,
@@ -388,7 +419,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           });
 
-
+          // Animate the next card if it exists
           if (index < stickyCards.length - 1) {
             stickyCards[index + 1].classList.add('next');
           }
@@ -397,58 +428,13 @@ document.addEventListener('DOMContentLoaded', () => {
           card.classList.remove('previous');
           card.classList.remove('next');
 
-
-          gsap.to(card, {
-            y: 0,
-            opacity: 0.8,
-            duration: 0.3,
-          });
+          // Reset opacity for non-active cards
+          gsap.to(card, { y: 0, opacity: 0.8, duration: 0.3 });
         }
       });
     }
 
-
-    function updateTextOpacity() {
-      stickyCards.forEach((card, index) => {
-        const text = stickyTexts[index];
-        const cardRect = card.getBoundingClientRect();
-        const cardCenter = cardRect.top + cardRect.height / 2;
-
-
-        if (cardCenter > window.innerHeight * 0.25 && cardCenter < window.innerHeight * 0.75) {
-
-          gsap.to(text, { opacity: 1, duration: 0.5 });
-        } else {
-
-          gsap.to(text, { opacity: 0, duration: 0.5 });
-        }
-      });
-    }
-
-
-    gsap.fromTo(
-      stickyCards,
-      {
-        opacity: 0,
-        yPercent: 90,
-      },
-      {
-        opacity: 1,
-        yPercent: 17,
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: ".sticky-section",
-          start: "top top",
-          end: "+=400%",
-          scrub: 1,
-          pin: true,
-          markers: false,
-          onUpdate: updateCardClasses,
-        },
-      }
-    );
-
-
+    // Animate text opacity only when the card is in view
     gsap.utils.toArray(stickyTexts).forEach((text, index) => {
       gsap.fromTo(
         text,
@@ -461,13 +447,18 @@ document.addEventListener('DOMContentLoaded', () => {
             end: "bottom center",
             scrub: 2,
             markers: false,
-            onUpdate: updateTextOpacity,
           },
         }
       );
     });
   }
+
   stickySectionCards();
+
+
+
+
+
 
   // FINAL WORKING PINED SCRIPT END
 

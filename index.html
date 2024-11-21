@@ -47,25 +47,26 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            
+
             align-items: center;
             gap: 20px;
-           
+
             height: 100%;
         }
 
         .sticky-card {
             position: absolute;
-           
+
             top: 0;
             left: 0;
             right: 0;
-      
-          
+
+
+            will-change: transform, opacity;
             width: 100%;
             transition: transform 0.3s ease, opacity 0.3s ease;
-  opacity: 0  !important;
-  transform: translateY(0); 
+            opacity: 0 !important;
+            transform: translateY(0);
         }
 
         .sticky-card_inner {
@@ -108,14 +109,21 @@
 
         .sticky-text.fade-out {
             opacity: 0;
-            transition: opacity 0.5s ease-out top 0.5s ease-out ;
+            transition: opacity 0.5s ease-out top 0.5s ease-out;
         }
 
-        .sticky-card.active .sticky-text{opacity: 1 !important;}
-        .sticky-card.previous .sticky-text{opacity: 0 !important;}
+        .sticky-card.active .sticky-text {
+            opacity: 1 !important;
+        }
+
+        .sticky-card.previous .sticky-text {
+            opacity: 0 !important;
+        }
+
         .sticky-card.active {
             opacity: 1 !important;
         }
+
         .sticky-card.previous {
             opacity: 0.6 !important;
         }
@@ -299,8 +307,9 @@
         <div class="sticky-section">
             <div class="sticky-inner">
                 <div class="bg-video">
-                    <video src="https://beta.remotecleanacademy.com/wp-content/themes/remotecleaningacademy/images/marketing-video.mp4" muted
-                        autoplay loop></video>
+                    <video
+                        src="https://beta.remotecleanacademy.com/wp-content/themes/remotecleaningacademy/images/marketing-video.mp4"
+                        muted autoplay loop></video>
                 </div>
                 <div class="sticky-content">
                     <div class="sticky-content-inner">
@@ -326,8 +335,10 @@
                                             alt="Building">
                                     </div>
                                     <div class="sticky-text">
-                                       
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem IpsumLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum</p>
+
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem IpsumLorem Ipsum is simply dummy text of the printing and typesetting
+                                            industry. Lorem Ipsum</p>
                                     </div>
                                 </div>
                             </div>
@@ -338,8 +349,10 @@
                                             alt="Building">
                                     </div>
                                     <div class="sticky-text">
-                                       
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem IpsumLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum</p>
+
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem IpsumLorem Ipsum is simply dummy text of the printing and typesetting
+                                            industry. Lorem Ipsum</p>
                                     </div>
                                 </div>
                             </div>
