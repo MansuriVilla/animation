@@ -1,0 +1,7 @@
+
+*{margin: 0px; padding: 0px;}
+#main{min-height: 100vh;}
+img{width:300px; /* height: 400px; */ border-radius: 20px;}
+/* .smooth-scroll {
+    overflow-y: hidden !important;
+  } */
